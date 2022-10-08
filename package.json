@@ -1,6 +1,6 @@
 {
-  "name": "robo",
-  "homepage": "https://ezdall.github.io/robo",
+  "name": "robo-redux",
+  "homepage": "https://ezdall.github.io/robo-redux",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
