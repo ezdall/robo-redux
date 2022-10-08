@@ -28,7 +28,7 @@ export const searchRobots = (state = initSearchState, action) => {
 
 const initRobotState = {
   isLoading: false,
-  error: null,
+  error: '', // error.message
   robots: []
 };
 

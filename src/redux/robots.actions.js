@@ -6,7 +6,7 @@ import {
 } from './robots.types';
 
 // const localUrl = 'http://localhost:3000/robots' - if using server
-const dummyUrl = 'https://jsonplaceholder.typicode.com/user';
+const dummyUrl = 'https://jsonplaceholder.typicode.com/users';
 
 export const setSearchField = text => ({
   type: CHANGE_SEARCH_FIELD,
@@ -20,7 +20,7 @@ export const requestRobots = () => dispatch => {
     type: REQUEST_ROBOTS_PENDING
   });
 
-  fetch(dummyUrl)
+  return fetch(dummyUrl)
     .then(resp => resp.json())
     .then(data =>
       dispatch({
@@ -29,10 +29,11 @@ export const requestRobots = () => dispatch => {
       })
     )
     .catch(error => {
-      console.log(error);
+      const errorMsg =
+        typeof error.message === 'string' ? error.message : 'Error!..';
       dispatch({
         type: REQUEST_ROBOTS_FAILED,
-        payload: error
+        payload: errorMsg
       });
     });
 };
