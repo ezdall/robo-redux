@@ -8,7 +8,7 @@ export default function SearchBox({ searchField, onSearchChange }) {
         type="search"
         name="search"
         placeholder="type to search"
-        onChange={onSearchChange}
+        onChange={ev => onSearchChange(ev.target.value)}
         value={searchField}
       />
     </div>

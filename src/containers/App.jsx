@@ -1,24 +1,34 @@
 import React from 'react';
+import { connect } from 'react-redux';
 //
 import SearchBox from '../components/search-box.comp';
 import CardList from '../components/card-list.comp';
 import Scroll from '../components/scroll.comp';
 import ErrorBoundry from '../components/error-boundry.comp';
+// redux
+import { setSearchField } from '../redux/robots.actions';
 
-//
+// style
 import './App.css';
 //
-export default class App extends React.Component {
+const mapStateToProps = state => ({
+  searchFieldRx: state.searchField
+});
+
+const mapDispatchToProps = dispatch => ({
+  setSearchFieldRx: text => dispatch(setSearchField(text))
+});
+
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       robots: [],
-      searchField: '',
       error: null,
       isLoading: false
     };
 
-    this.onSearchChange = this.onSearchChange.bind(this);
+    // this.onSearchChange = this.onSearchChange.bind(this);
   }
 
   componentDidMount() {
@@ -35,21 +45,24 @@ export default class App extends React.Component {
     // this.setState(() => ({ robots }));
   }
 
-  onSearchChange(ev) {
-    const { value } = ev.target;
+  // onSearchChange(ev) {
+  //   const { value } = ev.target;
+  //   const { setSearchFieldRx } = this.props;
 
-    // input-from: search-box event
-    this.setState({ searchField: value });
-  }
+  //   // input-from: search-box event
+  //   // this.setState({ searchField: value });
+  //   setSearchFieldRx(value);
+  // }
 
   render() {
-    const { robots, searchField, isLoading, error } = this.state;
+    const { robots, isLoading, error } = this.state;
+    const { searchFieldRx, setSearchFieldRx } = this.props;
 
     const filterRobots = robots.filter(robo => {
-      return robo.name.toLowerCase().includes(searchField.toLowerCase());
+      return robo.name.toLowerCase().includes(searchFieldRx.toLowerCase());
     });
 
-    console.log(searchField);
+    console.log(this.props);
 
     // during loading
     if (isLoading) {
@@ -65,8 +78,8 @@ export default class App extends React.Component {
         )}
 
         <SearchBox
-          searchField={searchField}
-          onSearchChange={this.onSearchChange}
+          searchField={searchFieldRx}
+          onSearchChange={setSearchFieldRx}
         />
         <Scroll>
           <ErrorBoundry>
@@ -81,3 +94,4 @@ export default class App extends React.Component {
     );
   }
 }
+export default connect(mapStateToProps, mapDispatchToProps)(App);
