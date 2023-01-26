@@ -46,12 +46,12 @@ class App extends React.Component {
   }
 
   // onSearchChange(ev) {
-  //   const { value } = ev.target;
-  //   const { setSearchFieldRx } = this.props;
+  // const { value } = ev.target;
+  // const { setSearchFieldRx } = this.props;
 
-  //   // input-from: search-box event
-  //   // this.setState({ searchField: value });
-  //   setSearchFieldRx(value);
+  // input-from: search-box event
+  // this.setState({ searchField: value });
+  // setSearchFieldRx(value);
   // }
 
   render() {
@@ -62,7 +62,7 @@ class App extends React.Component {
       return robo.name.toLowerCase().includes(searchFieldRx.toLowerCase());
     });
 
-    console.log(this.props);
+    // console.log(this.props);
 
     // during loading
     if (isLoading) {
