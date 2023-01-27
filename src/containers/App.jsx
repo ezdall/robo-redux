@@ -6,80 +6,64 @@ import CardList from '../components/card-list.comp';
 import Scroll from '../components/scroll.comp';
 import ErrorBoundry from '../components/error-boundry.comp';
 // redux
-import { setSearchField } from '../redux/robots.actions';
+import { setSearchField, requestRobots } from '../redux/robots.actions';
 
 // style
 import './App.css';
+
 //
-const mapStateToProps = state => ({
-  searchFieldRx: state.searchField
+const mapStateToProps = ({ robots, search }) => ({
+  searchFieldRx: search.searchField,
+  isLoadingRx: robots.isLoading,
+  robotsRx: robots.robots,
+  errorRx: robots.error
 });
 
 const mapDispatchToProps = dispatch => ({
-  setSearchFieldRx: text => dispatch(setSearchField(text))
+  onSearchFieldRx: text => dispatch(setSearchField(text)),
+  onRequestRobotsRx: () => dispatch(requestRobots())
 });
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      robots: [],
-      error: null,
-      isLoading: false
-    };
-
-    // this.onSearchChange = this.onSearchChange.bind(this);
-  }
-
+  //
   componentDidMount() {
-    // during loading
-    this.setState({ isLoading: true });
+    const { onRequestRobotsRx } = this.props;
 
     // input-from: online-fake-api
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(resp => resp.json())
-      .then(users => this.setState({ robots: users, isLoading: false }))
-      .catch(error => this.setState({ error, isLoading: false }));
-
-    // input-from: using local-data, props
-    // this.setState(() => ({ robots }));
+    onRequestRobotsRx();
   }
 
-  // onSearchChange(ev) {
-  // const { value } = ev.target;
-  // const { setSearchFieldRx } = this.props;
-
-  // input-from: search-box event
-  // this.setState({ searchField: value });
-  // setSearchFieldRx(value);
-  // }
-
   render() {
-    const { robots, isLoading, error } = this.state;
-    const { searchFieldRx, setSearchFieldRx } = this.props;
+    const {
+      searchFieldRx,
+      onSearchFieldRx,
+      isLoadingRx,
+      robotsRx,
+      errorRx
+    } = this.props;
 
-    const filterRobots = robots.filter(robo => {
+    const filterRobots = robotsRx.filter(robo => {
       return robo.name.toLowerCase().includes(searchFieldRx.toLowerCase());
     });
 
     // console.log(this.props);
 
     // during loading
-    if (isLoading) {
+    if (isLoadingRx) {
       return <h1 className="tc f1">Loading...</h1>;
     }
 
     return (
       <div className="tc">
-        {!isLoading && error ? (
-          <h1 className="tc f1 red">ERROR! </h1>
+        {!isLoadingRx && errorRx ? (
+          <h1 className="tc f1 red">{errorRx}</h1>
         ) : (
           <h1 className="f1">Success! - Robo List</h1>
         )}
 
         <SearchBox
           searchField={searchFieldRx}
-          onSearchChange={setSearchFieldRx}
+          onSearchChange={onSearchFieldRx}
         />
         <Scroll>
           <ErrorBoundry>
